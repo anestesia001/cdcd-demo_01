@@ -9,7 +9,8 @@ pipeline {
             sortMode: 'DESCENDING_SMART', 
             selectedValue: 'TOP',
             branchFilter: 'origin/(.*)',
-            quickFilterEnabled: true
+            quickFilterEnabled: true,
+            defaultValue: 'main'
         )
         booleanParam(name: 'RUN_TESTS', defaultValue: false)
         choice(name: 'ENV', choices: ['dev', 'prod'])
