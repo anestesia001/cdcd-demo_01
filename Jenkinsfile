@@ -7,7 +7,8 @@ pipeline {
             name: 'BRANCH', 
             type: 'PT_BRANCH_TAG', 
             sortMode: 'DESCENDING_SMART', 
-            selectedValue: 'TOP', 
+            selectedValue: 'TOP',
+            branchFilter: 'origin/(.*)',
             quickFilterEnabled: true
         )
         booleanParam(name: 'RUN_TESTS', defaultValue: false)
@@ -39,7 +40,7 @@ pipeline {
         stage('Checkout repo') {
             steps {
                 git(
-                    branch: '${params.BRANCH}',
+                    branch: params.BRANCH,
                     url: 'git@github.com:anestesia001/cdcd-demo_01.git',
                     credentialsId: 'jenkins-key'
                 )
