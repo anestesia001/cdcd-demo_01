@@ -1,6 +1,7 @@
 def remote = [:]
 
 pipeline {
+    agent any
     parameters {
         booleanParam(name: 'RUN_TESTS', defaultValue: false)
         choice(name: 'ENV', choices: ['dev', 'prod'])
