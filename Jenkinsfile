@@ -3,6 +3,13 @@ def remote = [:] //map -> dict
 pipeline {
     agent any
     parameters {
+        gitParameter(
+            name: 'BRANCH', 
+            type: 'PT_BRANCH_TAG', 
+            sortMode: 'DESCENDING_SMART', 
+            selectedValue: 'TOP', 
+            quickFilterEnabled: true
+        )
         booleanParam(name: 'RUN_TESTS', defaultValue: false)
         choice(name: 'ENV', choices: ['dev', 'prod'])
     }
@@ -32,7 +39,7 @@ pipeline {
         stage('Checkout repo') {
             steps {
                 git(
-                    branch: 'main',
+                    branch: '${params.BRANCH}',
                     url: 'git@github.com:anestesia001/cdcd-demo_01.git',
                     credentialsId: 'jenkins-key'
                 )
