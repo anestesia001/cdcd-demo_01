@@ -50,10 +50,10 @@ pipeline {
                 ]) 
                 {
                     script {
-                        remote.name = env.HOST
-                        remote.host = env.HOST
-                        remote.user = ${USERNAME}
-                        remote.identity = readFile(${PRIVATE_KEY})
+                        remote.name = "${env.HOST}"
+                        remote.host = "${env.HOST}"
+                        remote.user = "${USERNAME}"
+                        remote.identity = readFile "${PRIVATE_KEY}"
                         remote.allowAnyHosts = true
                     }
                 }
@@ -64,7 +64,7 @@ pipeline {
             steps {
                 script {
                     sh """
-                        docker build -t $IMAGE .
+                        docker build -t "$IMAGE" .
                     """
                 }
             }
@@ -74,8 +74,8 @@ pipeline {
             steps {
                 script {
                     sh """
-                        echo $DOCKER_TOKEN | docker login -u anestesia01 --password-stdin
-                        docker push $IMAGE
+                        echo "$DOCKER_TOKEN" | docker login -u anestesia01 --password-stdin
+                        docker push "$IMAGE"
                         docker logout
                     """
                 }
@@ -87,8 +87,8 @@ pipeline {
                 script {
                     sshCommand remote: remote, command: """
                         set -e
-                        docker pull $IMAGE
-                        cd ${env.PRJ_DIR}
+                        docker pull "$IMAGE"
+                        cd "${env.PRJ_DIR}"
                         sed -i "s|image: anestesia01.*|image: ${env.IMAGE}|" compose.yml
                         docker compose up -d
                     """
@@ -96,5 +96,4 @@ pipeline {
             }
         }
     }
-
 }
