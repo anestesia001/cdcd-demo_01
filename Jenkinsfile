@@ -1,4 +1,4 @@
-def remote = [:]
+def remote = [:] //map -> dict
 
 pipeline {
     agent any
@@ -91,6 +91,24 @@ pipeline {
                         cd "${env.PRJ_DIR}"
                         sed -i "s|image: anestesia01.*|image: ${env.IMAGE}|" compose.yml
                         docker compose up -d
+                    """
+                }
+            }
+        }
+
+        stage('Run tests') {
+            when {
+                expression {
+                    return params.RUN_TESTS
+                }
+            }
+            steps {
+                script {
+                    sshCommand remote: remote, command: """
+                        set -e
+                        echo "Running tests"
+                        cd "${env.PRJ_DIR}"
+                        docker compose exec counter pytest -v
                     """
                 }
             }
